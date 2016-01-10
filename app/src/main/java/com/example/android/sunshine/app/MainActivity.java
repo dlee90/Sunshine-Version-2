@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,8 @@ public class MainActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private ArrayAdapter<String> mForecastAdapter;
+
         public PlaceholderFragment() {
         }
 
@@ -68,6 +72,20 @@ public class MainActivity extends ActionBarActivity {
             forecastSample.add("Thurs - Rainy - 64/51");
             forecastSample.add("Fri - Foggy - 70/46");
             forecastSample.add("Sat - Sunny - 76/68");
+
+            mForecastAdapter = new ArrayAdapter<String>(
+                    // The current context (this fragment's parent activity)
+                    getActivity(),
+                    // ID of list item layout
+                    R.layout.list_item_forecast,
+                    // ID of the textview to populate
+                    R.id.list_item_forecast_textview,
+                    // Forecast data
+                    forecastSample);
+
+            // Get a reference to the ListView, and attach this adapter to it
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+            listView.setAdapter(mForecastAdapter);
 
             return rootView;
         }
