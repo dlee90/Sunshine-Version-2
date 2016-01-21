@@ -25,7 +25,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String FORECASTFRAGMENT_TAG = ForecastFragment.class.getSimpleName();
+
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
         }
+        mLocation = Utility.getPreferredLocation(this);
     }
 
     @Override
@@ -82,6 +86,18 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         } else {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!Utility.getPreferredLocation(this).equals(mLocation)) {
+            ForecastFragment ff =
+                    (ForecastFragment)getSupportFragmentManager()
+                            .findFragmentByTag(FORECASTFRAGMENT_TAG);
+            mLocation = Utility.getPreferredLocation(this);
+            ff.onLocationChanged();
         }
     }
 }
