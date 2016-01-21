@@ -92,12 +92,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!Utility.getPreferredLocation(this).equals(mLocation)) {
+        String location = Utility.getPreferredLocation(this);
+        if (location != null && !location.equals(mLocation)) {
             ForecastFragment ff =
                     (ForecastFragment)getSupportFragmentManager()
                             .findFragmentByTag(FORECASTFRAGMENT_TAG);
-            mLocation = Utility.getPreferredLocation(this);
-            ff.onLocationChanged();
+            if (ff != null) {
+                ff.onLocationChanged();
+            }
+            mLocation = location;
         }
     }
 }
