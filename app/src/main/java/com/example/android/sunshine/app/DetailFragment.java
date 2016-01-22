@@ -224,7 +224,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mWindView.setText(Utility.getFormattedWind(getActivity(), windSpeedStr, windDirStr));
 
             // Set wind direction in custom view
-            mCompass.update(Utility.convertDegreesToRadians(windDirStr));
+            mCompass.update(windDirStr);
 
             // Read pressure from cursor and update view
             float pressure = data.getFloat(COL_WEATHER_PRESSURE);

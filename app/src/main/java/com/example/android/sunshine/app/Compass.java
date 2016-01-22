@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 public class Compass extends View {
 
@@ -52,23 +54,39 @@ public class Compass extends View {
         paint.setStrokeWidth(5);
         paint.setColor(Color.GRAY);
 
-        canvas.drawCircle(w/2, h/2, r, paint);
+        canvas.drawCircle(w / 2, h / 2, r, paint);
 
         paint.setColor(getResources().getColor(R.color.sunshine_dark_blue));
+        double dirRad = Utility.convertDegreesToRadians(direction);
         canvas.drawLine(
                 w / 2,
                 h / 2,
-                (float) (w / 2 + r * Math.sin(-direction)),
-                (float) (h / 2 - r * Math.cos(-direction)),
+                (float) (w / 2 + r * Math.sin(-dirRad)),
+                (float) (h / 2 - r * Math.cos(-dirRad)),
                 paint);
 
     }
 
     public void update(double dir){
+
+        AccessibilityManager accessibilityManager =
+                (AccessibilityManager) getContext().getSystemService(
+                        Context.ACCESSIBILITY_SERVICE);
+        if (accessibilityManager.isEnabled()) {
+            sendAccessibilityEvent(
+                    AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        }
+
         direction = dir;
 
         // Call invalidate to force drawing on page.
 
         invalidate();
+    }
+
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        event.getText().add(String.valueOf(direction));
+        return true;
     }
 }
