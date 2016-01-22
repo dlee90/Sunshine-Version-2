@@ -9,7 +9,7 @@ import android.view.View;
 
 public class Compass extends View {
 
-    private float direction;
+    private double direction = Double.NaN;
 
     public Compass(Context context) {
         super(context);
@@ -34,6 +34,10 @@ public class Compass extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
+        // don't draw an image if no direction has been provided
+        if (direction == Double.NaN) {
+            return;
+        }
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
         int r;
@@ -60,7 +64,7 @@ public class Compass extends View {
 
     }
 
-    public void update(float dir){
+    public void update(double dir){
         direction = dir;
 
         // Call invalidate to force drawing on page.

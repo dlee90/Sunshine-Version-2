@@ -244,4 +244,8 @@ public class Utility {
         }
         return -1;
     }
+
+    public static double convertDegreesToRadians(double d) {
+        return d * Math.PI / 180;
+    }
 }
